@@ -7,17 +7,9 @@ import * as RadixSelect from '@radix-ui/react-select'
 export type SelectContext = {
   size: SelectSizes
 }
-const SelectContext = createContext<SelectContext | null>(null)
-const useSelect = () => {
-  const context = useContext(SelectContext)
-  if(!context) throw new Error('Select context not found in parent.')
-
-  return context
-}
 
 type SelectLabelProps = RadixSelect.SelectLabelProps
 const SelectLabel: FC<SelectLabelProps> = (props) => {
-  const context = useSelect()
   return (
     <RadixSelect.Label {...props} asChild>
       <label>
@@ -96,11 +88,8 @@ const SelectBase = forwardRef<HTMLButtonElement, SelectProps>(({
   }, [props.disabled, onChange])
 
   return (
-    <SelectContext.Provider value={{
-      size: SelectSizes[size]
-    }}>
-        <RadixSelect.Root onValueChange={handleChange} value={value} defaultValue={defaultValue} >
-        <div>
+    <RadixSelect.Root onValueChange={handleChange} value={value} defaultValue={defaultValue} >
+      <div>
         {label
         ? (
           <label
@@ -137,21 +126,20 @@ const SelectBase = forwardRef<HTMLButtonElement, SelectProps>(({
             )
           : null}
           </div>
-          <RadixSelect.Portal>
-            <RadixSelect.Content position='popper'>
-              <RadixSelect.ScrollUpButton>
-                up
-              </RadixSelect.ScrollUpButton>
-              <RadixSelect.Viewport>
-                {children}
-              </RadixSelect.Viewport>
-              <RadixSelect.ScrollDownButton>
-                down
-              </RadixSelect.ScrollDownButton>
-            </RadixSelect.Content>
-          </RadixSelect.Portal>
-        </RadixSelect.Root>
-    </SelectContext.Provider>
+        <RadixSelect.Portal>
+          <RadixSelect.Content position='popper'>
+            <RadixSelect.ScrollUpButton>
+              up
+            </RadixSelect.ScrollUpButton>
+            <RadixSelect.Viewport>
+              {children}
+            </RadixSelect.Viewport>
+            <RadixSelect.ScrollDownButton>
+              down
+            </RadixSelect.ScrollDownButton>
+          </RadixSelect.Content>
+        </RadixSelect.Portal>
+      </RadixSelect.Root>
   )
 })
 
